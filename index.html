@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nishit's Bootloader Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Stage Counter -->
+        <div class="stage-counter" id="stageCounter">Stage 1 of 8</div>
+
+        <!-- Main Story Container -->
+        <div class="story-container">
+            <!-- Stage 1: Introduction -->
+            <div class="stage active" id="stage1">
+                <div class="mascot">
+                    <div class="mascot-character">🤖</div>
+                    <div class="mascot-name">Nishit</div>
+                </div>
+                <div class="content">
+                    <h1>Welcome to the Bootloader Adventure!</h1>
+                    <p>Hi! I'm Nishit, your guide through the fascinating journey of how a computer boots up.
+                        Let's explore what happens from the moment you press the power button!</p>
+                    <div class="highlight-box">
+                        <strong>What we'll learn:</strong>
+                        <ul>
+                            <li>The complete boot sequence</li>
+                            <li>BIOS/UEFI firmware</li>
+                            <li>Bootloaders and kernels</li>
+                            <li>How Linux comes to life</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 2: Power On -->
+            <div class="stage" id="stage2">
+                <div class="mascot">
+                    <div class="mascot-character">⚡</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 1: Power On! 🔌</h2>
+                    <p>When you press the power button, electricity flows through the motherboard and the CPU powers up!
+                    </p>
+                    <div class="technical-box">
+                        <h3>What happens inside:</h3>
+                        <p>The CPU is hard-wired to start executing instructions from a special memory address called
+                            the
+                            <strong>"Reset Vector"</strong>. This is like the CPU's starting point—its first
+                            instruction.
+                        </p>
+                        <p>This reset vector points to firmware stored in non-volatile memory (ROM or Flash memory) on
+                            your motherboard.</p>
+                    </div>
+                    <div class="animation-box">
+                        <div class="power-animation">
+                            <div class="power-button">PWR</div>
+                            <div class="power-flow"></div>
+                            <div class="cpu-box">CPU</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 3: BIOS/UEFI -->
+            <div class="stage" id="stage3">
+                <div class="mascot">
+                    <div class="mascot-character">💾</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 2: BIOS/UEFI Firmware 🔧</h2>
+                    <p>Now the firmware takes control! This is special software stored on your motherboard.</p>
+                    <div class="comparison-box">
+                        <div class="compare-item">
+                            <h3>BIOS</h3>
+                            <p><strong>Basic Input Output System</strong></p>
+                            <p>• Traditional firmware</p>
+                            <p>• Uses MBR (Master Boot Record)</p>
+                            <p>• Limited to 2TB drives</p>
+                            <p>• Text-based interface</p>
+                        </div>
+                        <div class="compare-item">
+                            <h3>UEFI</h3>
+                            <p><strong>Unified Extensible Firmware Interface</strong></p>
+                            <p>• Modern firmware</p>
+                            <p>• Uses GPT (GUID Partition Table)</p>
+                            <p>• Supports larger drives</p>
+                            <p>• Graphical interface</p>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <strong>Fun Fact:</strong> Firmware is like the computer's instruction manual that vendors
+                        (like Dell, HP, Lenovo) write directly onto the motherboard!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 4: POST -->
+            <div class="stage" id="stage4">
+                <div class="mascot">
+                    <div class="mascot-character">🔍</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 3: POST - Power-On Self-Test ✅</h2>
+                    <p>Before booting, the firmware performs a health check of all hardware components!</p>
+                    <div class="post-checks">
+                        <div class="check-item">
+                            <span class="check-icon">✓</span>
+                            <span>CPU Check</span>
+                        </div>
+                        <div class="check-item">
+                            <span class="check-icon">✓</span>
+                            <span>Memory (RAM) Test</span>
+                        </div>
+                        <div class="check-item">
+                            <span class="check-icon">✓</span>
+                            <span>Keyboard & Mouse</span>
+                        </div>
+                        <div class="check-item">
+                            <span class="check-icon">✓</span>
+                            <span>Storage Devices</span>
+                        </div>
+                        <div class="check-item">
+                            <span class="check-icon">✓</span>
+                            <span>Graphics Card</span>
+                        </div>
+                    </div>
+                    <p>If all checks pass, the firmware searches for a bootable device (HDD, SSD, USB, or Network).</p>
+                </div>
+            </div>
+
+            <!-- Stage 5: MBR/ESP -->
+            <div class="stage" id="stage5">
+                <div class="mascot">
+                    <div class="mascot-character">💿</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 4: Finding the Bootloader 🔎</h2>
+                    <p>The firmware now looks at the storage device to find the bootloader. There are two ways:</p>
+
+                    <div class="storage-structure">
+                        <h3>BIOS System (MBR)</h3>
+                        <div class="disk-visualization">
+                            <div class="disk-section mbr">
+                                <strong>MBR (512 bytes)</strong>
+                                <p>• Bootloader code: 446 bytes</p>
+                                <p>• Partition table: 64 bytes</p>
+                                <p>• Boot signature: 2 bytes</p>
+                            </div>
+                            <div class="disk-section partition">
+                                <strong>Partition 1</strong>
+                                <p>GRUB Bootloader</p>
+                            </div>
+                            <div class="disk-section partition">
+                                <strong>Partition 2</strong>
+                                <p>Linux OS & Data</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="storage-structure">
+                        <h3>UEFI System (ESP)</h3>
+                        <div class="disk-visualization">
+                            <div class="disk-section esp">
+                                <strong>GPT Table</strong>
+                                <p>GUID Partition Table</p>
+                            </div>
+                            <div class="disk-section esp">
+                                <strong>ESP (100-500 MB)</strong>
+                                <p>EFI System Partition</p>
+                                <p>grubx64.efi executable</p>
+                            </div>
+                            <div class="disk-section partition">
+                                <strong>OS Partition</strong>
+                                <p>Linux & Data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 6: GRUB -->
+            <div class="stage" id="stage6">
+                <div class="mascot">
+                    <div class="mascot-character">🎯</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 5: GRUB Bootloader 🚀</h2>
+                    <p>GRUB (Grand Unified Bootloader) is now loaded into memory. It's like a menu that lets you choose
+                        which operating system to boot!</p>
+
+                    <div class="grub-menu">
+                        <div class="menu-title">GNU GRUB - Boot Menu</div>
+                        <div class="menu-item selected">► Linux Kernel 6.x.x (default)</div>
+                        <div class="menu-item"> Advanced options for Linux</div>
+                        <div class="menu-item"> Memory Test</div>
+                    </div>
+
+                    <div class="technical-box">
+                        <h3>GRUB's Job:</h3>
+                        <p>1. Reads its configuration file</p>
+                        <p>2. Shows a menu (text or graphical)</p>
+                        <p>3. Locates the kernel binary file</p>
+                        <p>4. Loads kernel + initramfs into RAM</p>
+                        <p>5. Passes control to the kernel</p>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Modern Version:</strong> Most Linux systems now use GRUB2, which is more powerful and
+                        flexible!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 7: Kernel -->
+            <div class="stage" id="stage7">
+                <div class="mascot">
+                    <div class="mascot-character">🧠</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 6: Linux Kernel Initialization 🐧</h2>
+                    <p>The heart of the operating system—the Linux kernel—now takes control!</p>
+
+                    <div class="kernel-process">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>Decompression</strong>
+                                <p>Kernel unpacks itself in memory</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>Hardware Detection</strong>
+                                <p>Identifies and initializes hardware</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>Driver Loading</strong>
+                                <p>Loads necessary device drivers</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>Mount Root Filesystem</strong>
+                                <p>Mounts the actual root filesystem</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>What is the Kernel?</strong>
+                        <p>The kernel is the core program that controls ALL computer hardware and allows software to
+                            run.
+                            It manages memory, processes, drivers, and talks to all devices!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 8: init/systemd -->
+            <div class="stage" id="stage8">
+                <div class="mascot">
+                    <div class="mascot-character">⚙️</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 7: init/systemd - First Process 🎬</h2>
+                    <p>The kernel launches the very first user-space process with PID 1!</p>
+
+                    <div class="comparison-box">
+                        <div class="compare-item">
+                            <h3>Old: init</h3>
+                            <p><strong>SysVinit</strong></p>
+                            <p>• Starts services sequentially</p>
+                            <p>• One service at a time</p>
+                            <p>• Slower boot times</p>
+                            <p>• Simple but outdated</p>
+                        </div>
+                        <div class="compare-item highlight">
+                            <h3>Modern: systemd</h3>
+                            <p><strong>System and Service Manager</strong></p>
+                            <p>• Starts services in parallel</p>
+                            <p>• Multiple services simultaneously</p>
+                            <p>• Much faster boot times</p>
+                            <p>• Feature-rich</p>
+                        </div>
+                    </div>
+
+                    <div class="services-animation">
+                        <h3>systemd starting services...</h3>
+                        <div class="service-items">
+                            <div class="service">Network</div>
+                            <div class="service">Display Manager</div>
+                            <div class="service">Sound System</div>
+                            <div class="service">File System</div>
+                        </div>
+                    </div>
+
+                    <div class="runlevels">
+                        <h3>systemd Targets (Runlevels)</h3>
+                        <p>• poweroff.target (runlevel 0)</p>
+                        <p>• rescue.target (runlevel 1)</p>
+                        <p>• multi-user.target (runlevel 3)</p>
+                        <p>• graphical.target (runlevel 5)</p>
+                        <p>• reboot.target (runlevel 6)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 9: User Space -->
+            <div class="stage" id="stage9">
+                <div class="mascot">
+                    <div class="mascot-character">🎉</div>
+                </div>
+                <div class="content">
+                    <h2>Stage 8: System Ready! 🎊</h2>
+                    <p>Congratulations! The system is now fully booted and ready for you to use!</p>
+
+                    <div class="userspace-diagram">
+                        <div class="space-section user-space">
+                            <h3>User Space</h3>
+                            <p>Where you work!</p>
+                            <div class="apps">
+                                <span class="app">🌐 Browser</span>
+                                <span class="app">📝 Editor</span>
+                                <span class="app">🎵 Music</span>
+                                <span class="app">💬 Chat</span>
+                            </div>
+                        </div>
+                        <div class="space-divider">↕️ System Calls</div>
+                        <div class="space-section kernel-space">
+                            <h3>Kernel Space</h3>
+                            <p>Behind the scenes</p>
+                            <div class="kernel-tasks">
+                                <span>Memory Management</span>
+                                <span>Process Scheduling</span>
+                                <span>Device Drivers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="completion-box">
+                        <h3>🏆 Boot Sequence Complete!</h3>
+                        <p>You've learned the entire journey from pressing the power button to a fully running Linux
+                            system!</p>
+                        <div class="summary">
+                            <p>Power → BIOS/UEFI → POST → MBR/ESP → GRUB → Kernel → systemd → User Space</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Fun Fact:</strong> This entire process typically takes just 10-30 seconds on modern
+                        systems!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation">
+            <button id="prevBtn" class="nav-btn" disabled>← Previous</button>
+            <button id="nextBtn" class="nav-btn">Next →</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
