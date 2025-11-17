@@ -1,364 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nishit's Bootloader Journey</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div class="main-container">
-        <!-- Header -->
+    <div class="container">
         <header>
-            <h1>The Bootloader Journey</h1>
-            <p class="subtitle">Follow Nishit through the complete boot process</p>
+            <h1>Nishit's Bootloader Journey</h1>
+            <p>Follow the rolling ball through each boot stage</p>
         </header>
 
-        <!-- Progress Indicator -->
-        <div class="progress-wrapper">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+        <!-- Main Track -->
+        <div class="track-container">
+            <!-- Rolling Ball (Nishit) -->
+            <div class="ball" id="ball">
+                <svg width="70" height="70" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#ff6b35" stroke="#000" stroke-width="3"/>
+                    <circle cx="35" cy="38" r="6" fill="#fff"/>
+                    <circle cx="65" cy="38" r="6" fill="#fff"/>
+                    <circle cx="35" cy="38" r="3" fill="#000"/>
+                    <circle cx="65" cy="38" r="3" fill="#000"/>
+                    <path d="M 32 58 Q 50 68 68 58" stroke="#000" stroke-width="3" fill="none"/>
+                    <text x="50" y="85" font-size="16" text-anchor="middle" fill="#fff" font-weight="bold">Nishit</text>
+                </svg>
             </div>
-            <div class="stage-info" id="stageInfo">Stage 1 of 8</div>
-        </div>
 
-        <!-- Map Container -->
-        <div class="map-container" id="mapContainer">
-            <!-- The Path/Road -->
-            <svg class="journey-path" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
-                <!-- Main winding path -->
-                <path id="mainPath" d="M 50 300 Q 200 100, 350 250 T 650 350 T 950 300" stroke="#FFB84D"
-                    stroke-width="80" fill="none" opacity="0.3" />
+            <!-- Zigzag Path Markers -->
+            <div class="path-marker" style="top: 50px; left: 10%;"></div>
+            <div class="path-marker" style="top: 200px; left: 80%;"></div>
+            <div class="path-marker" style="top: 350px; left: 15%;"></div>
+            <div class="path-marker" style="top: 500px; left: 75%;"></div>
+            <div class="path-marker" style="top: 650px; left: 20%;"></div>
+            <div class="path-marker" style="top: 800px; left: 70%;"></div>
+            <div class="path-marker" style="top: 950px; left: 25%;"></div>
+            <div class="path-marker" style="top: 1100px; left: 50%;"></div>
 
-                <!-- Waypoint circles -->
-                <circle cx="50" cy="300" r="30" class="waypoint" id="wp1" />
-                <circle cx="250" cy="180" r="30" class="waypoint" id="wp2" />
-                <circle cx="450" cy="320" r="30" class="waypoint" id="wp3" />
-                <circle cx="550" cy="280" r="30" class="waypoint" id="wp4" />
-                <circle cx="700" cy="380" r="30" class="waypoint" id="wp5" />
-                <circle cx="800" cy="330" r="30" class="waypoint" id="wp6" />
-                <circle cx="900" cy="320" r="30" class="waypoint" id="wp7" />
-                <circle cx="950" cy="300" r="40" class="waypoint final" id="wp8" />
-
-                <!-- Mascot Character -->
-                <g id="mascot" class="mascot">
-                    <!-- Simple robot character -->
-                    <circle cx="0" cy="0" r="20" fill="#FF6B35" />
-                    <rect x="-15" y="10" width="30" height="35" rx="5" fill="#FF6B35" />
-                    <circle cx="-7" cy="-5" r="4" fill="#FFF" />
-                    <circle cx="7" cy="-5" r="4" fill="#FFF" />
-                    <circle cx="-7" cy="-5" r="2" fill="#333" />
-                    <circle cx="7" cy="-5" r="2" fill="#333" />
-                    <path d="M -8 5 Q 0 8, 8 5" stroke="#333" stroke-width="2" fill="none" />
-                </g>
-            </svg>
-
-            <!-- Content Box -->
+            <!-- Content Box (shows current stage only) -->
             <div class="content-box" id="contentBox">
-                <div class="content-inner">
-                    <!-- Stage 1 -->
-                    <div class="stage-content active" data-stage="1">
-                        <h2>Welcome to the Journey!</h2>
-                        <div class="description">
-                            <p>Hi! I'm <strong>Nishit</strong>, your guide through the fascinating world of computer
-                                booting.</p>
-                            <p>We'll travel together through the complete journey of how a computer starts up - from the
-                                moment you press the power button to when you see your desktop!</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>What We'll Explore:</h3>
-                            <ul>
-                                <li>Power-on sequence</li>
-                                <li>BIOS and UEFI firmware</li>
-                                <li>Bootloaders and kernels</li>
-                                <li>System initialization</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Stage 2 -->
-                    <div class="stage-content" data-stage="2">
-                        <h2>Stage 1: Power On</h2>
-                        <div class="description">
-                            <p>When you press the power button, electricity flows through the motherboard and the CPU
-                                powers up!</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>Reset Vector</h3>
-                            <p>The CPU is hard-wired to start executing instructions from a special memory address
-                                called the <strong>"Reset Vector"</strong>.</p>
-                            <p>This is like the CPU's starting point - its very first instruction.</p>
-                            <p>The reset vector points to firmware stored in non-volatile memory (ROM or Flash) on your
-                                motherboard.</p>
-                        </div>
-                        <div class="tech-note">
-                            <strong>Technical:</strong> The CPU begins execution from a fixed address in firmware
-                            memory.
-                        </div>
-                    </div>
-
-                    <!-- Stage 3 -->
-                    <div class="stage-content" data-stage="3">
-                        <h2>Stage 2: BIOS/UEFI Firmware</h2>
-                        <div class="description">
-                            <p>The firmware takes control! This is special software stored on your motherboard by the
-                                manufacturer.</p>
-                        </div>
-                        <div class="comparison-grid">
-                            <div class="compare-card">
-                                <h3>BIOS</h3>
-                                <p><strong>Basic Input Output System</strong></p>
-                                <ul>
-                                    <li>Traditional firmware</li>
-                                    <li>Uses MBR (Master Boot Record)</li>
-                                    <li>Limited to 2TB drives</li>
-                                    <li>Text-based interface</li>
-                                </ul>
-                            </div>
-                            <div class="compare-card highlighted">
-                                <h3>UEFI</h3>
-                                <p><strong>Unified Extensible Firmware Interface</strong></p>
-                                <ul>
-                                    <li>Modern firmware</li>
-                                    <li>Uses GPT (GUID Partition Table)</li>
-                                    <li>Supports larger drives</li>
-                                    <li>Graphical interface</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stage 4 -->
-                    <div class="stage-content" data-stage="4">
-                        <h2>Stage 3: POST - Power-On Self-Test</h2>
-                        <div class="description">
-                            <p>Before booting, the firmware performs a comprehensive health check of all hardware
-                                components.</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>Hardware Checks</h3>
-                            <div class="check-list">
-                                <div class="check-item">✓ CPU Verification</div>
-                                <div class="check-item">✓ Memory (RAM) Test</div>
-                                <div class="check-item">✓ Keyboard & Mouse Detection</div>
-                                <div class="check-item">✓ Storage Device Scan</div>
-                                <div class="check-item">✓ Graphics Card Check</div>
-                            </div>
-                        </div>
-                        <div class="tech-note">
-                            If all checks pass, the firmware searches for a bootable device (HDD, SSD, USB, or Network).
-                        </div>
-                    </div>
-
-                    <!-- Stage 5 -->
-                    <div class="stage-content" data-stage="5">
-                        <h2>Stage 4: Finding the Bootloader</h2>
-                        <div class="description">
-                            <p>The firmware now examines the storage device to locate the bootloader. There are two
-                                approaches:</p>
-                        </div>
-                        <div class="disk-layout">
-                            <div class="layout-section">
-                                <h3>BIOS System (MBR)</h3>
-                                <div class="disk-visual">
-                                    <div class="disk-part mbr-part">
-                                        <strong>MBR</strong>
-                                        <span>512 bytes</span>
-                                    </div>
-                                    <div class="disk-part boot-part">
-                                        <strong>GRUB</strong>
-                                        <span>Bootloader</span>
-                                    </div>
-                                    <div class="disk-part os-part">
-                                        <strong>Linux OS</strong>
-                                        <span>& Data</span>
-                                    </div>
-                                </div>
-                                <p class="note">MBR contains: 446 bytes bootloader code + 64 bytes partition table + 2
-                                    bytes signature</p>
-                            </div>
-                            <div class="layout-section">
-                                <h3>UEFI System (ESP)</h3>
-                                <div class="disk-visual">
-                                    <div class="disk-part gpt-part">
-                                        <strong>GPT</strong>
-                                        <span>Table</span>
-                                    </div>
-                                    <div class="disk-part esp-part">
-                                        <strong>ESP</strong>
-                                        <span>100-500MB</span>
-                                    </div>
-                                    <div class="disk-part os-part">
-                                        <strong>Linux OS</strong>
-                                        <span>& Data</span>
-                                    </div>
-                                </div>
-                                <p class="note">ESP holds EFI executables like grubx64.efi</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stage 6 -->
-                    <div class="stage-content" data-stage="6">
-                        <h2>Stage 5: GRUB Bootloader</h2>
-                        <div class="description">
-                            <p>GRUB (Grand Unified Bootloader) is now loaded into memory. It presents a menu to choose
-                                which OS to boot.</p>
-                        </div>
-                        <div class="terminal-box">
-                            <div class="terminal-header">GNU GRUB - Boot Menu</div>
-                            <div class="terminal-content">
-                                <div class="menu-option selected">► Linux Kernel 6.x.x (default)</div>
-                                <div class="menu-option"> Advanced options for Linux</div>
-                                <div class="menu-option"> Memory Test (memtest86+)</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <h3>GRUB's Responsibilities</h3>
-                            <ul>
-                                <li>Reads its configuration file</li>
-                                <li>Displays menu (text or graphical)</li>
-                                <li>Locates the kernel binary</li>
-                                <li>Loads kernel + initramfs into RAM</li>
-                                <li>Transfers control to kernel</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Stage 7 -->
-                    <div class="stage-content" data-stage="7">
-                        <h2>Stage 6: Linux Kernel</h2>
-                        <div class="description">
-                            <p>The heart of the operating system - the Linux kernel - now takes control!</p>
-                        </div>
-                        <div class="process-flow">
-                            <div class="flow-step">
-                                <div class="step-num">1</div>
-                                <div class="step-content">
-                                    <h4>Decompression</h4>
-                                    <p>Kernel unpacks itself in memory</p>
-                                </div>
-                            </div>
-                            <div class="flow-step">
-                                <div class="step-num">2</div>
-                                <div class="step-content">
-                                    <h4>Hardware Detection</h4>
-                                    <p>Identifies and initializes hardware</p>
-                                </div>
-                            </div>
-                            <div class="flow-step">
-                                <div class="step-num">3</div>
-                                <div class="step-content">
-                                    <h4>Driver Loading</h4>
-                                    <p>Loads necessary device drivers</p>
-                                </div>
-                            </div>
-                            <div class="flow-step">
-                                <div class="step-num">4</div>
-                                <div class="step-content">
-                                    <h4>Mount Filesystem</h4>
-                                    <p>Mounts the root filesystem</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tech-note">
-                            <strong>Key Point:</strong> The kernel controls ALL hardware and manages memory, processes,
-                            and drivers.
-                        </div>
-                    </div>
-
-                    <!-- Stage 8 -->
-                    <div class="stage-content" data-stage="8">
-                        <h2>Stage 7: systemd - First Process</h2>
-                        <div class="description">
-                            <p>The kernel launches the very first user-space process with PID 1 - the init system!</p>
-                        </div>
-                        <div class="comparison-grid">
-                            <div class="compare-card">
-                                <h3>Old: init (SysVinit)</h3>
-                                <ul>
-                                    <li>Sequential startup</li>
-                                    <li>One service at a time</li>
-                                    <li>Slower boot times</li>
-                                    <li>Simple shell scripts</li>
-                                </ul>
-                            </div>
-                            <div class="compare-card highlighted">
-                                <h3>Modern: systemd</h3>
-                                <ul>
-                                    <li>Parallel startup</li>
-                                    <li>Multiple services simultaneously</li>
-                                    <li>Much faster boot</li>
-                                    <li>Advanced features</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <h3>systemd Targets (Runlevels)</h3>
-                            <div class="target-list">
-                                <div>poweroff.target → Shutdown (Runlevel 0)</div>
-                                <div>rescue.target → Single user mode (Runlevel 1)</div>
-                                <div>multi-user.target → Multi-user, no GUI (Runlevel 3)</div>
-                                <div>graphical.target → Multi-user with GUI (Runlevel 5)</div>
-                                <div>reboot.target → Reboot (Runlevel 6)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stage 9 -->
-                    <div class="stage-content" data-stage="9">
-                        <h2>Journey Complete! System Ready</h2>
-                        <div class="description">
-                            <p>Congratulations! The system is now fully booted and ready for use!</p>
-                        </div>
-                        <div class="space-diagram">
-                            <div class="space-box user-space">
-                                <h3>User Space</h3>
-                                <p>Where applications run</p>
-                                <div class="app-icons">
-                                    <span>Browser</span>
-                                    <span>Editor</span>
-                                    <span>Terminal</span>
-                                    <span>Media Player</span>
-                                </div>
-                            </div>
-                            <div class="divider">↕ System Calls</div>
-                            <div class="space-box kernel-space">
-                                <h3>Kernel Space</h3>
-                                <p>Behind the scenes</p>
-                                <div class="kernel-tasks">
-                                    <span>Memory Management</span>
-                                    <span>Process Scheduling</span>
-                                    <span>Device Drivers</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="completion-banner">
-                            <h3>Boot Sequence Summary</h3>
-                            <p class="boot-flow">Power → BIOS/UEFI → POST → MBR/ESP → GRUB → Kernel → systemd → User
-                                Space</p>
-                            <p class="time-note">This entire process typically takes just 10-30 seconds on modern
-                                systems!</p>
-                        </div>
-                    </div>
-                </div>
+                <!-- Content will be dynamically inserted here -->
             </div>
         </div>
 
         <!-- Navigation -->
-        <div class="navigation">
-            <button id="prevBtn" class="nav-button" disabled>
+        <nav class="navigation">
+            <button id="prevBtn" disabled>
                 <span>←</span> Previous
             </button>
-            <button id="nextBtn" class="nav-button">
+            <button id="nextBtn">
                 Next <span>→</span>
             </button>
-        </div>
+        </nav>
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>
