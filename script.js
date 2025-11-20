@@ -521,7 +521,7 @@ function updateStage() {
         const viewportHeight = window.innerHeight;
 
         // Calculate scroll position to center the content box
-        const scrollTo = contentBoxTop - (viewportHeight / 2) + (contentBoxHeight / 2) + 140;
+        const scrollTo = contentBoxTop - (viewportHeight / 2) + (contentBoxHeight / 2) + 180;
 
         window.scrollTo({
             top: scrollTo,
