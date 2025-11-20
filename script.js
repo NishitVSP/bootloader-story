@@ -1,16 +1,74 @@
 let currentStage = 0;
-const totalStages = 8;
+const totalStages = 9;
+let quizStarted = false;
+let currentQuestion = 0;
+let score = 0;
 
-// Ball positions in zigzag pattern (top, left)
+// Ball positions in zigzag pattern (top, left) - NOW 9 POSITIONS FOR 9 STAGES
 const ballPositions = [
-    { top: 20, left: 10 },     // Start
+    { top: 20, left: 10 },     // Stage 0 - Start
     { top: 200, left: 80 },    // Stage 1
     { top: 350, left: 15 },    // Stage 2
     { top: 500, left: 75 },    // Stage 3
     { top: 650, left: 20 },    // Stage 4
     { top: 800, left: 70 },    // Stage 5
     { top: 950, left: 25 },    // Stage 6
-    { top: 1100, left: 50 }    // Stage 7
+    { top: 1100, left: 50 },   // Stage 7
+    { top: 1250, left: 50 }    // Stage 8 - Final stage
+];
+
+// Quiz questions
+const quizQuestions = [
+    {
+        question: "What does UEFI stand for?",
+        options: [
+            "Unified Extensible Firmware Interface",
+            "Universal Extended File Interface",
+            "Unified Electronic Firmware Integration",
+            "Universal Executable Format Interface"
+        ],
+        correct: 0
+    },
+    {
+        question: "What is the size of the MBR (Master Boot Record)?",
+        options: [
+            "256 bytes",
+            "512 bytes",
+            "1024 bytes",
+            "2048 bytes"
+        ],
+        correct: 1
+    },
+    {
+        question: "Which init system starts services in parallel?",
+        options: [
+            "SysVinit",
+            "init",
+            "systemd",
+            "OpenRC"
+        ],
+        correct: 2
+    },
+    {
+        question: "What is the first user-space process ID (PID)?",
+        options: [
+            "PID 0",
+            "PID 1",
+            "PID 2",
+            "PID 10"
+        ],
+        correct: 1
+    },
+    {
+        question: "What does POST stand for in the boot process?",
+        options: [
+            "Power-On System Test",
+            "Power-On Self-Test",
+            "Pre-Operating System Test",
+            "Primary Operating System Transfer"
+        ],
+        correct: 1
+    }
 ];
 
 // Content for each stage
@@ -241,22 +299,22 @@ menuentry "Linux" {<br>
                 <div class="flow-step">
                     <div class="step-num">2</div>
                     <div class="step-content">
-                        <h4>Hardware Detection & Initialization</h4>
-                        <p>Kernel probes and identifies all hardware components - CPU, RAM, disks, network cards, etc.</p>
+                        <h4>Hardware Detection</h4>
+                        <p>Kernel probes and identifies all hardware - CPU, RAM, disks, network cards.</p>
                     </div>
                 </div>
                 <div class="flow-step">
                     <div class="step-num">3</div>
                     <div class="step-content">
-                        <h4>Driver Loading (initramfs)</h4>
-                        <p>Loads essential device drivers from initramfs - a temporary mini-filesystem in RAM containing kernel modules.</p>
+                        <h4>Driver Loading</h4>
+                        <p>Loads essential drivers from initramfs - a temporary mini-filesystem in RAM.</p>
                     </div>
                 </div>
                 <div class="flow-step">
                     <div class="step-num">4</div>
                     <div class="step-content">
                         <h4>Mount Root Filesystem</h4>
-                        <p>Once storage drivers load, kernel mounts the actual root filesystem (/) from disk. initramfs is discarded.</p>
+                        <p>Once storage drivers load, kernel mounts the actual root filesystem (/) from disk.</p>
                     </div>
                 </div>
                 <div class="flow-step">
@@ -331,7 +389,7 @@ menuentry "Linux" {<br>
         content: `
             <p>Congratulations! The system has fully booted and is now ready for user interaction!</p>
             <div class="completion-banner">
-                <h3>🎉 Boot Sequence Complete!</h3>
+                <h3> Boot Sequence Complete!</h3>
                 <div class="boot-flow">
                     Power Button → Reset Vector → BIOS/UEFI → POST → MBR/ESP → GRUB → Kernel → systemd → User Space
                 </div>
@@ -375,9 +433,12 @@ updateStage();
 
 // Next button
 nextBtn.addEventListener('click', () => {
-    if (currentStage < totalStages) {
+    if (currentStage < totalStages - 1) {
         currentStage++;
         updateStage();
+    } else if (currentStage === totalStages - 1 && !quizStarted) {
+        // Start quiz when Finish button is clicked
+        startQuiz();
     }
 });
 
@@ -391,7 +452,7 @@ prevBtn.addEventListener('click', () => {
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' && currentStage < totalStages) {
+    if (e.key === 'ArrowRight' && currentStage < totalStages - 1) {
         currentStage++;
         updateStage();
     } else if (e.key === 'ArrowLeft' && currentStage > 0) {
@@ -438,17 +499,197 @@ function updateStage() {
     // Update button states
     prevBtn.disabled = currentStage === 0;
 
-    if (currentStage === totalStages) {
+    if (currentStage === totalStages - 1 && !quizStarted) {
+        nextBtn.innerHTML = 'Start Quiz <span>📝</span>';
+    } else if (currentStage === totalStages - 1) {
         nextBtn.innerHTML = 'Finish <span>✓</span>';
     } else {
         nextBtn.innerHTML = 'Next <span>→</span>';
     }
 
-    // Scroll to ball position
+    // Auto-focus on Next button
+    if (currentStage < totalStages - 1) {
+        nextBtn.focus();
+    } else {
+        nextBtn.focus();
+    }
+
+    // Scroll to center the content box in viewport
     setTimeout(() => {
+        const contentBoxTop = contentBox.offsetTop;
+        const contentBoxHeight = contentBox.offsetHeight;
+        const viewportHeight = window.innerHeight;
+
+        // Calculate scroll position to center the content box
+        const scrollTo = contentBoxTop - (viewportHeight / 2) + (contentBoxHeight / 2);
+
         window.scrollTo({
-            top: ball.offsetTop - 100,
+            top: scrollTo,
             behavior: 'smooth'
         });
     }, 100);
 }
+
+function startQuiz() {
+    quizStarted = true;
+    currentQuestion = 0;
+    score = 0;
+    showQuestion();
+}
+
+function showQuestion() {
+    const question = quizQuestions[currentQuestion];
+
+    contentBox.innerHTML = `
+        <h2>Quiz Time! 📝</h2>
+        <div class="quiz-container">
+            <div class="quiz-progress">Question ${currentQuestion + 1} of ${quizQuestions.length}</div>
+            <div class="quiz-question">
+                <h3>${question.question}</h3>
+            </div>
+            <div class="quiz-options">
+                ${question.options.map((option, index) => `
+                    <button class="quiz-option" onclick="selectAnswer(${index})">
+                        ${String.fromCharCode(65 + index)}. ${option}
+                    </button>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    // Hide navigation buttons during quiz
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+}
+
+function selectAnswer(selectedIndex) {
+    const question = quizQuestions[currentQuestion];
+    const isCorrect = selectedIndex === question.correct;
+
+    if (isCorrect) {
+        score++;
+    }
+
+    // Show feedback
+    const options = document.querySelectorAll('.quiz-option');
+    options.forEach((option, index) => {
+        option.disabled = true;
+        if (index === question.correct) {
+            option.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
+            option.style.color = 'white';
+            option.style.borderColor = '#4CAF50';
+        } else if (index === selectedIndex && !isCorrect) {
+            option.style.background = 'linear-gradient(135deg, #f44336 0%, #e57373 100%)';
+            option.style.color = 'white';
+            option.style.borderColor = '#f44336';
+        }
+    });
+
+    // Move to next question after delay
+    setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < quizQuestions.length) {
+            showQuestion();
+        } else {
+            showResults();
+        }
+    }, 1500);
+}
+
+function showResults() {
+    const percentage = (score / quizQuestions.length) * 100;
+    let message, emoji, resultClass;
+
+    if (percentage === 100) {
+        message = "Perfect Score! 🎉";
+        emoji = "🏆";
+        resultClass = "excellent";
+    } else if (percentage >= 80) {
+        message = "Excellent Work!";
+        emoji = "🌟";
+        resultClass = "excellent";
+    } else if (percentage >= 60) {
+        message = "Good Job!";
+        emoji = "👍";
+        resultClass = "good";
+    } else if (percentage >= 40) {
+        message = "Not Bad!";
+        emoji = "💪";
+        resultClass = "average";
+    } else {
+        message = "Better Luck Next Time!";
+        emoji = "📚";
+        resultClass = "poor";
+    }
+
+    contentBox.innerHTML = `
+        <div class="quiz-results ${resultClass}">
+            <div class="result-emoji">${emoji}</div>
+            <h2>${message}</h2>
+            <div class="score-display">
+                <div class="score-number">${score}/${quizQuestions.length}</div>
+                <div class="score-percentage">${percentage.toFixed(0)}%</div>
+            </div>
+            <div class="result-message">
+                ${percentage >= 80 ?
+            "You've mastered the bootloader concepts!" :
+            percentage >= 60 ?
+                "You have a solid understanding of bootloaders!" :
+                "Keep learning about bootloaders - you'll get there!"}
+            </div>
+        </div>
+    `;
+
+    // Show final celebration animation
+    setTimeout(() => {
+        showFinalCelebration();
+    }, 2000);
+}
+
+function showFinalCelebration() {
+    // Create celebration overlay
+    const celebration = document.createElement('div');
+    celebration.className = 'celebration-overlay';
+    celebration.innerHTML = `
+        <div class="celebration-content">
+            <h1 class="celebration-title">🎊 Congratulations! 🎊</h1>
+            <p class="celebration-text">You've successfully learned about the Linux Bootloader!</p>
+            <div class="bootloader-badge">
+                <div class="badge-icon"></div>
+                <div class="badge-text">Bootloader Expert</div>
+            </div>
+            <button class="restart-btn" onclick="restartJourney()">Start Over</button>
+        </div>
+    `;
+    document.body.appendChild(celebration);
+
+    // Trigger animation
+    setTimeout(() => {
+        celebration.classList.add('show');
+    }, 100);
+}
+
+function restartJourney() {
+    // Remove celebration overlay
+    const celebration = document.querySelector('.celebration-overlay');
+    if (celebration) {
+        celebration.remove();
+    }
+
+    // Reset everything
+    currentStage = 0;
+    quizStarted = false;
+    currentQuestion = 0;
+    score = 0;
+
+    // Show navigation buttons
+    prevBtn.style.display = 'flex';
+    nextBtn.style.display = 'flex';
+
+    // Go back to start
+    updateStage();
+}
+
+// Make selectAnswer global
+window.selectAnswer = selectAnswer;
+window.restartJourney = restartJourney;
